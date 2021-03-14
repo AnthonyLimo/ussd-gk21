@@ -14,18 +14,20 @@ app.post('/', (req, res) => {
 
     if (text == '') {
         // This is the first request. Note how we start the response with CON
-        response = `CON What would you like to check
-        1. My account
-        2. My phone number`;
+        response = `CON Please choose your healthcare service:
+        1. Emergency Alert
+        2. Medication delivery
+        3. Medical Appointment
+        4. Clinic Availability`;
     } else if ( text == '1') {
         // Business logic for first level response
-        response = `CON Choose account information you want to view
-        1. Account number
-        2. Account balance`;
+        response = `CON Choose the emergency services you would like to access:
+        1. Emergency Hotline Numbers
+        2. Councelling Numbers`;
     } else if ( text == '2') {
         // Business logic for first level response
         // This is a terminal request. Note how we start the response with END
-        response = `END Your phone number is ${phoneNumber}`;
+        response = `END Delivery for ${phoneNumber} is happening on 21/6/2021`;
     } else if ( text == '1*1') {
         // This is a second level response where the user selected 1 in the first instance
         const accountNumber = 'ACC100101';
