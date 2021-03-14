@@ -3,6 +3,7 @@ const express = require('express');
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // USSD routes
 app.get('/', function (req, res) {
@@ -11,15 +12,15 @@ app.get('/', function (req, res) {
 
 app.post('/', (req, res) => {
     // Read variables sent via POST from our SDK
-    console.log(req.body.sessionId);
+    console.log(req.body);
 
     const { sessionId, serviceCode, phoneNumber, text } = req.body;
 
     let response = "";
 
-    if (text == "") {
+    if ( text == "" ) {
         // This is the first request. Note how we start the response with CON
-        response = "CON Please choose your healthcare service: 1. Emergency Alert2. Medication delivery3. Medical Appointment4. Clinic Availability";
+        response = "CON Please choose your healthcare service: 1. Emergency Alert \n2. Medication delivery\n3. Medical Appointment\n4. Clinic Availability";
     } else if ( text == '1') {
         // Business logic for first level response
         response = "CON Choose the emergency services you would like to access:\n 1. Emergency Hotline Numbers 2. Councelling Numbers";
