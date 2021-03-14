@@ -15,20 +15,14 @@ app.post('/', (req, res) => {
 
     const { sessionId, serviceCode, phoneNumber, text } = req.body;
 
-    let response = '';
+    let response = "";
 
-    if (text == '') {
+    if (text == "") {
         // This is the first request. Note how we start the response with CON
-        response = `CON Please choose your healthcare service:
-        1. Emergency Alert
-        2. Medication delivery
-        3. Medical Appointment
-        4. Clinic Availability`;
+        response = "CON Please choose your healthcare service: 1. Emergency Alert2. Medication delivery3. Medical Appointment4. Clinic Availability";
     } else if ( text == '1') {
         // Business logic for first level response
-        response = `CON Choose the emergency services you would like to access:
-        1. Emergency Hotline Numbers
-        2. Councelling Numbers`;
+        response = "CON Choose the emergency services you would like to access:\n 1. Emergency Hotline Numbers 2. Councelling Numbers";
     } else if ( text == '2') {
         // Business logic for first level response
         // This is a terminal request. Note how we start the response with END
@@ -43,10 +37,11 @@ app.post('/', (req, res) => {
         const balance = 'KES 10,000';
         // This is a terminal request. Note how we start the response with END
         response = `END Your balance is ${balance}`;
+    } else {
+        response = "END Something is wrong"
     }
 
     // Print the response onto the page so that our SDK can read it
-    res.set('Content-Type: text/plain');
     res.send(response);
     // DONE!!!
 });
