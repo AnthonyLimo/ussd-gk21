@@ -1,5 +1,8 @@
 const express = require('express');
+//const bodyParser = require('body-parser');
+
 const app = express();
+app.use(express.json());
 
 // USSD routes
 app.get('/', function (req, res) {
@@ -8,6 +11,8 @@ app.get('/', function (req, res) {
 
 app.post('/', (req, res) => {
     // Read variables sent via POST from our SDK
+    console.log(req.body.sessionId);
+
     const { sessionId, serviceCode, phoneNumber, text } = req.body;
 
     let response = '';
