@@ -2,15 +2,30 @@ const express = require('express');
 //const bodyParser = require('body-parser');
 
 const app = express();
+
+let port = process.env.PORT || 5000;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Set your app credentials
+const credentials = {
+    apiKey: '83a856ef45150c8227c327f4d4da9a6e5c4fc9774f8a8a69e6ba63632fc8ddbf',
+    username: 'sandbox',
+};
+
+// Initialize the SDK
+const AfricasTalking = require('africastalking')(credentials);
+
+// Get the SMS service
+const sms = AfricasTalking.SMS;
 
 // USSD routes
 app.get('/', function (req, res) {
     res.send('Hello, world');
 });
 
-app.post('/', (req, res) => {
+app.post('/ussd', (req, res) => {
     // Read variables sent via POST from our SDK
     console.log(req.body);
 
@@ -20,24 +35,21 @@ app.post('/', (req, res) => {
 
     if ( text == "" ) {
         // This is the first request. Note how we start the response with CON
-        response = "CON Please choose your healthcare service: 1. Emergency Alert \n2. Medication delivery\n3. Medical Appointment\n4. Clinic Availability";
+        response = `CON Welcome to the MS Power Africa and AT event: \n 1. Check your phone number \n2. Get your surpirse message`;
     } else if ( text == '1') {
         // Business logic for first level response
-        response = "CON Choose the emergency services you would like to access:\n 1. Emergency Hotline Numbers 2. Councelling Numbers";
+        response = `CON Your phone number is ${phoneNumber} `;
     } else if ( text == '2') {
         // Business logic for first level response
         // This is a terminal request. Note how we start the response with END
-        response = `END Delivery for ${phoneNumber} is happening on 21/6/2021`;
-    } else if ( text == '1*1') {
-        // This is a second level response where the user selected 1 in the first instance
-        const accountNumber = 'ACC100101';
-        // This is a terminal request. Note how we start the response with END
-        response = `END Your account number is ${accountNumber}`;
-    } else if ( text == '1*2') {
-        // This is a second level response where the user selected 1 in the first instance
-        const balance = 'KES 10,000';
-        // This is a terminal request. Note how we start the response with END
-        response = `END Your balance is ${balance}`;
+        //Send a message
+        const options = {
+            to: phoneNumber,
+            message: "SURPRISE"
+        };
+        let resp = sms.send(options);
+        console.log(resp);
+        response = `END Hey there! Check your messages :D`;
     } else {
         response = "END Something is wrong"
     }
@@ -48,6 +60,6 @@ app.post('/', (req, res) => {
 });
 
 
-app.listen(3000, () => {
-    console.log(`App is running...`);
+app.listen(port, () => {
+    console.log(`App is running... on port ${port}`);
 });
